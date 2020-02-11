@@ -1,22 +1,26 @@
 #!/bin/bash
 set -o errexit
 
-# Install build deps
-apt-get -y -q remove imagemagick
+IMAGE_MAGICK_VERSION="7.0.8-66"
+LIBPNG_VERSION="1.6.37"
 
 PREFIX=/usr/local
 WDIR=/tmp/imagemagick
+
 mkdir -p $WDIR
+cd $WDIR
 
 # Build and install libpng
-git clone -b v1.6.34 https://github.com/glennrp/libpng.git $WDIR/libpng
-cd $WDIR/libpng
-./autogen.sh
+wget -O $WDIR/libpng.tar.gz https://prdownloads.sourceforge.net/libpng/libpng-$LIBPNG_VERSION.tar.gz?download
+
+tar -xzvf $WDIR/libpng.tar.gz
+cd $WDIR/libpng-$LIBPNG_VERSION
+
 ./configure --prefix=$PREFIX
 make all && make install
 
 # Build and install ImageMagick
-wget -O $WDIR/ImageMagick.tar.gz "https://github.com/ImageMagick/ImageMagick/archive/7.0.8-6.tar.gz"
+wget -O $WDIR/ImageMagick.tar.gz "https://github.com/ImageMagick/ImageMagick/archive/$IMAGE_MAGICK_VERSION.tar.gz"
 IMDIR=$WDIR/$(tar tzf $WDIR/ImageMagick.tar.gz --wildcards "ImageMagick-*/configure" |cut -d/ -f1)
 tar zxf $WDIR/ImageMagick.tar.gz -C $WDIR
 cd $IMDIR

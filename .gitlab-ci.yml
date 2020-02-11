@@ -1,0 +1,57 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  DOCKER_HUB_REPO: libresh/discourse
+
+test-beta:
+  tags:
+  - build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - export DISCOURSE_VERSION=`wget -qO- https://api.github.com/repos/discourse/discourse/tags | grep name | cut -d'"' -f4 | grep beta | head -n1`
+    - /kaniko/executor --context . --no-push --build-arg DISCOURSE_VERSION=$DISCOURSE_VERSION
+  except:
+  - master
+
+test-stable:
+  tags:
+  - build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - export DISCOURSE_VERSION=`wget -qO- https://api.github.com/repos/discourse/discourse/tags | grep name | cut -d'"' -f4 | grep -v beta | head -n1`
+    - /kaniko/executor --context . --no-push --build-arg DISCOURSE_VERSION=$DISCOURSE_VERSION
+  except:
+  - master
+
+build-beta:
+  tags:
+  - build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - cp $DOCKER_SECRET_CONFIG /kaniko/.docker/config.json
+    - export DISCOURSE_VERSION=`wget -qO- https://api.github.com/repos/discourse/discourse/tags | grep name | cut -d'"' -f4 | grep beta | head -n1`
+    - export DISCOURSE_MAJOR=`echo $DISCOURSE_VERSION | cut -d"." -f1-3`
+    - export DESTINATION="--destination ${DOCKER_HUB_REPO}:${DISCOURSE_VERSION} --destination ${DOCKER_HUB_REPO}:${DISCOURSE_MAJOR} --destination ${DOCKER_HUB_REPO}:beta"
+    - /kaniko/executor --context .  ${DESTINATION} --build-arg DISCOURSE_VERSION=$DISCOURSE_VERSION
+  only:
+  - master
+
+build-stable:
+  tags:
+  - build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - cp $DOCKER_SECRET_CONFIG /kaniko/.docker/config.json
+    - export DISCOURSE_VERSION=`wget -qO- https://api.github.com/repos/discourse/discourse/tags | grep name | cut -d'"' -f4 | grep -v beta | head -n1`
+    - export DISCOURSE_MAJOR=`echo $DISCOURSE_VERSION | cut -d"." -f1-2`
+    - export DESTINATION="--destination ${DOCKER_HUB_REPO}:${DISCOURSE_VERSION} --destination ${DOCKER_HUB_REPO}:${DISCOURSE_MAJOR} --destination ${DOCKER_HUB_REPO}:stable"
+    - /kaniko/executor --context .  ${DESTINATION} --build-arg DISCOURSE_VERSION=$DISCOURSE_VERSION
+  only:
+  - master

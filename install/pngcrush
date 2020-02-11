@@ -1,6 +1,4 @@
-#!/bin/bash
-set -e
-PNGCRUSH_VERSION=1.8.13
+#!/bin/bash -e
 cd /tmp
 wget https://sourceforge.net/projects/pmt/files/pngcrush/$PNGCRUSH_VERSION/pngcrush-$PNGCRUSH_VERSION.tar.gz/download -O pngcrush-$PNGCRUSH_VERSION.tar.gz
 tar zxf pngcrush-$PNGCRUSH_VERSION.tar.gz
