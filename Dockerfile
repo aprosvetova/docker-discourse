@@ -88,7 +88,8 @@ RUN curl http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add - \
 RUN cd /home/discourse/discourse/plugins \
  && for plugin in $(cat /tmp/install/plugin-list); do \
       git clone $plugin; \
-    done;
+    done; \
+ && chown -R discourse:discourse .
 
 WORKDIR /home/discourse/discourse
 
