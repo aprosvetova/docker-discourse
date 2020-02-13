@@ -26,6 +26,7 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main" | \
 RUN curl --silent --location https://deb.nodesource.com/setup_8.x | bash - \
  && apt-get update && apt-get install -y --no-install-recommends \
       ${BUILD_DEPS} \
+      brotli \
       ghostscript \
       gsfonts \
       imagemagick \
