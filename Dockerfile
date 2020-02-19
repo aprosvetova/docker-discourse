@@ -50,7 +50,7 @@ RUN curl http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add - \
       jhead \
       postgresql-client-${PG_MAJOR} \
       postgresql-contrib-${PG_MAJOR} libpq-dev libreadline-dev \
- && npm install svgo uglify-js@"<3" -g \
+ && npm install svgo uglify-js -g \
  && mkdir /jemalloc-stable && cd /jemalloc-stable &&\
       wget https://github.com/jemalloc/jemalloc/releases/download/${JEMALLOC_STABLE}/jemalloc-${JEMALLOC_STABLE}.tar.bz2 &&\
       tar -xjf jemalloc-${JEMALLOC_STABLE}.tar.bz2 && cd jemalloc-${JEMALLOC_STABLE} && ./configure --prefix=/usr && make && make install &&\
