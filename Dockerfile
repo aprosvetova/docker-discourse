@@ -44,6 +44,7 @@ RUN curl http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add - \
       ghostscript \
       gsfonts \
       jpegoptim \
+      liblqr-1-0 \
       libxml2 \
       nodejs \
       optipng \
@@ -82,7 +83,7 @@ RUN curl http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add - \
  && bundle install --deployment --verbose --without test --without development --retry 3 --jobs 4 \
  && find /home/discourse/discourse/vendor/bundle -name tmp -type d -exec rm -rf {} + \
  && apt-get remove -y --purge ${BUILD_DEPS} \
- && apt-get autoremove -y \
+ #&& apt-get autoremove -y \
  && rm -rf /var/lib/apt/lists/*
 
 RUN cd /home/discourse/discourse/plugins \
