@@ -40,6 +40,7 @@ RUN curl http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add - \
  && curl --silent --location https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
  && apt-get update && apt-get install -y --no-install-recommends \
       ${BUILD_DEPS} \
+      ca-certificates \
       brotli \
       ghostscript \
       gsfonts \
@@ -82,7 +83,7 @@ RUN curl http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | apt-key add - \
  && bundle config build.nokogiri --use-system-libraries \
  && bundle install --deployment --verbose --without test --without development --retry 3 --jobs 4 \
  && find /home/discourse/discourse/vendor/bundle -name tmp -type d -exec rm -rf {} + \
- && apt-get remove -y --purge ${BUILD_DEPS} \
+ #&& apt-get remove -y --purge ${BUILD_DEPS} \
  #&& apt-get autoremove -y \
  && rm -rf /var/lib/apt/lists/*
 
