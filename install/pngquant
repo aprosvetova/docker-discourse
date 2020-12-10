@@ -1,6 +1,6 @@
 #!/bin/bash
 cd /tmp
-git clone -b PNGQUANT_VERSION --single-branch https://github.com/pornel/pngquant
+git clone -b $PNGQUANT_VERSION --single-branch https://github.com/pornel/pngquant
 cd pngquant
 make && make install
 cd /
